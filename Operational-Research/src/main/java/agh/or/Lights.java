@@ -1,6 +1,7 @@
 package agh.or;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,11 +10,15 @@ public class Lights {
 
     private final int state;
     private final List<Integer> value = new ArrayList<>();
+    private final List<Integer> on = new ArrayList<>();
 
     public Lights(int state){
         this.state = state;
         for (int i = 0; i != Lights.LIGHT_COUNT; ++i) {
             value.add(state & 1);
+            if((state & 1) == 1){
+                on.add(i);
+            }
             state >>= 1;
         }
     }
@@ -31,6 +36,10 @@ public class Lights {
         return state != 0;
     }
 
+    public List<Integer> on() {
+        return Collections.unmodifiableList(this.on);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
@@ -42,8 +51,8 @@ public class Lights {
 
         str.append('[');
 
-        for(int i = 0; i < LIGHT_COUNT; ++i){
-            str.append("%d, ".formatted(get(i)));
+        for(int light : on){
+            str.append("%d, ".formatted(light));
         }
 
         str.deleteCharAt(str.length() - 1);
