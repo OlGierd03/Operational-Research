@@ -7,12 +7,24 @@ import java.util.List;
 public class Solution {
     private List<O> values = new ArrayList<O>();
 
+    public static Solution random(Configuration configuration) {
+        return new Solution(ORandomizer.randomize(configuration));
+    }
+
     public Solution(List<O> values) {
         this.values = values;
     }
 
     public List<O> getValues() {
         return Collections.unmodifiableList(values);
+    }
+
+    public O get(int i) {
+        return values.get(i);
+    }
+
+    public int size() {
+        return values.size();
     }
 
     public static boolean willEnd(List<O> values) {
