@@ -23,5 +23,7 @@ public class ORandomizer {
             ));
 
         }
+
+        return result;
     }
 }
