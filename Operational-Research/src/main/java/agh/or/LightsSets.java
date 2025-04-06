@@ -1,9 +1,6 @@
 package agh.or;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class LightsSets {
     private static final Set<Lights> invalids = new HashSet<>();
@@ -25,21 +22,21 @@ public class LightsSets {
             int straight = i * 3 + 1;
             int right = i * 3 + 2;
 
-            if(lights.get(left)) for(var coll : collWithLeft){
+            if(lights.get(left) == 1) for(var coll : collWithLeft){
                 int checked = (left + coll) % Lights.LIGHT_COUNT;
-                if(lights.get(checked)){
+                if(lights.get(checked) == 1){
                     return true;
                 }
             }
-            if(lights.get(straight)) for(var coll : collWithStraight){
+            if(lights.get(straight) == 1) for(var coll : collWithStraight){
                 int checked = (straight + coll - 1) % Lights.LIGHT_COUNT;
-                if(lights.get(checked)){
+                if(lights.get(checked) == 1){
                     return true;
                 }
             }
-            if(lights.get(right)) for(var coll : collWithRight){
+            if(lights.get(right) == 1) for(var coll : collWithRight){
                 int checked = (right + coll - 2) % Lights.LIGHT_COUNT;
-                if(lights.get(checked)){
+                if(lights.get(checked) == 1){
                     return true;
                 }
             }
@@ -68,13 +65,13 @@ public class LightsSets {
         if(invalids.isEmpty()) {
             generate();
         }
-        return invalids;
+        return Collections.unmodifiableSet(invalids);
     }
 
     public static Set<Lights> getValids() {
         if(valids.isEmpty()) {
             generate();
         }
-        return valids;
+        return Collections.unmodifiableSet(valids);
     }
 }

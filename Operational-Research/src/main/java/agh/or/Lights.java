@@ -1,23 +1,34 @@
 package agh.or;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Lights {
     public static final int LIGHT_COUNT = 12;
 
-    private final int value;
+    private final int state;
+    private final List<Integer> value = new ArrayList<>();
 
     public Lights(int state){
-        this.value = state;
+        this.state = state;
+        for (int i = 0; i != Lights.LIGHT_COUNT; ++i) {
+            value.add(state & 1);
+            state >>= 1;
+        }
     }
 
-    public boolean get(int index){
+    public int get(int index){
         assert index >= 0 && index < LIGHT_COUNT;
-        return (value & (1 << index)) != 0;
+        return value.get(index);
+    }
+
+    public int getState(){
+        return state;
     }
 
     public boolean anyOn() {
-        return value != 0;
+        return state != 0;
     }
 
     @Override
@@ -32,7 +43,7 @@ public class Lights {
         str.append('[');
 
         for(int i = 0; i < LIGHT_COUNT; ++i){
-            str.append("%d, ".formatted(get(i) ? 1 : 0));
+            str.append("%d, ".formatted(get(i)));
         }
 
         str.deleteCharAt(str.length() - 1);
