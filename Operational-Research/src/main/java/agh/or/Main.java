@@ -6,7 +6,7 @@ public class Main {
             System.out.println(invalidLight);
         }
         System.out.println(LightsSets.getValids().size());*/
-        /*Configuration configuration = new Configuration(
+        Configuration configuration = new Configuration(
                 Lights.LIGHT_COUNT * 5,
                 10,
                 15,
@@ -15,6 +15,6 @@ public class Main {
         );
 
         Simulation simulation = new Simulation(configuration, Solution.random(configuration));
-        simulation.run(true);*/
+        simulation.run(true);
     }
 }
