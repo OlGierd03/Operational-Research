@@ -14,7 +14,7 @@ public class Main {
                 100
         );
 
-        Simulation simulation = new Simulation(configuration, Solution.random(configuration));
+        Simulation simulation = new Simulation(configuration, Solution.genetic(configuration));
         simulation.run(true);
     }
 }

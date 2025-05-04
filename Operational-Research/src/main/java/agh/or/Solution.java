@@ -1,14 +1,20 @@
 package agh.or;
 
+import agh.or.gen.GeneticAlgorithm;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Solution {
-    private List<O> values = new ArrayList<O>();
+    private final List<O> values;
 
     public static Solution random(Configuration configuration) {
         return new Solution(ORandomizer.randomize(configuration));
+    }
+
+    public static Solution genetic(Configuration configuration) {
+        return new Solution(new GeneticAlgorithm(configuration).run());
     }
 
     public Solution(List<O> values) {
