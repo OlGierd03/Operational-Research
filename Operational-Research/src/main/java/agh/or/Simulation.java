@@ -2,20 +2,11 @@ package agh.or;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Simulation {
     private Configuration configuration;
     private List<Integer> carCount;
     private Solution solution;
-
-    private void createCars() {
-        Random rand = new Random();
-        for(int i = 0; i != configuration.carCount(); ++i) {
-            var place = rand.nextInt(Lights.LIGHT_COUNT);
-            carCount.set(place, carCount.get(place) + 1);
-        }
-    }
 
     public Simulation(Configuration configuration, Solution solution) {
         this.configuration = configuration;
@@ -26,7 +17,8 @@ public class Simulation {
         for(int i = 0; i != 12; ++i){
             carCount.add(0);
         }
-        this.createCars();
+
+        carCount = CarListGenerator.createCars(configuration);
     }
 
     private int carCountSum() {
