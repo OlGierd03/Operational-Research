@@ -12,10 +12,12 @@ public class Population {
     private final List<List<O>> individuals = new ArrayList<>();
     private final Configuration configuration;
     private final List<Integer> carCount;
+    private Random random;
 
     public Population(Configuration configuration, List<Integer> carCount, int size) {
         this.configuration = configuration;
         this.carCount = carCount;
+        this.random = new Random(configuration.seed());
         for (int i = 0; i < size; i++) {
             this.individuals.add(ORandomizer.randomize(configuration));
         }
@@ -34,7 +36,7 @@ public class Population {
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
-            Collections.shuffle(copy);
+            Collections.shuffle(copy, new Random(configuration.seed()));
             List<O> child = crossoverParents(copy.getFirst(), copy.getLast());
             List<O> child2 = crossoverParents(copy.getFirst(), copy.getLast());
             copy.removeFirst();
@@ -55,8 +57,8 @@ public class Population {
     }
 
     private O crossoverGens(O gen1, O gen2) {
-        Random rand = new Random();
-        if (rand.nextInt(100) > 60){
+
+        if (random.nextInt(100) > 60){
             return gen1;
         }
         else {
@@ -85,7 +87,7 @@ public class Population {
 
     private void mutateIndividual(List<O> individual, double mutationChance) {
         for (int i = 0; i < individual.size(); i++) {
-            if (Math.random() <= mutationChance) {
+            if (random.nextDouble() <= mutationChance) {
                 individual.set(i, ORandomizer.randomize(configuration).get(0));
             }
         }
