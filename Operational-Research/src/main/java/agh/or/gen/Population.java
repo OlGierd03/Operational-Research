@@ -6,7 +6,9 @@ import agh.or.ORandomizer;
 import agh.or.Solution;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Population {
 
@@ -32,10 +34,13 @@ public class Population {
     }
 
     private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
-        // Placeholder: TODO: wybieranie jak krzyżować rodziców (już wybrani)
+        List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
-        for (int i = 0; i < parents.size() - 1; i += 2) {
-            List<O> child = crossoverParents(parents.get(i), parents.get(i + 1));
+        while (!copy.isEmpty()) {
+            Collections.shuffle(copy);
+            List<O> child = crossoverParents(copy.getFirst(), copy.getLast());
+            copy.removeFirst();
+            copy.removeLast();
             offspring.add(child);
         }
         return offspring;
@@ -51,8 +56,13 @@ public class Population {
     }
 
     private O crossoverGens(O gen1, O gen2) {
-        // Placeholder: TODO: implementacja powstawania nowego genu dziecka
-        return gen1;
+        Random rand = new Random();
+        if (rand.nextInt(100) > 60){
+            return gen1;
+        }
+        else {
+            return gen2;
+        }
     }
 
     private int getScore(List<O> individual) {
