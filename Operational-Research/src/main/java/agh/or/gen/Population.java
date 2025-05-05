@@ -14,7 +14,7 @@ public class Population {
 
     private final List<List<O>> individuals = new ArrayList<>();
     private final Configuration configuration;
-    private List<Integer> carCount = new ArrayList<>();
+    private final List<Integer> carCount;
 
     public Population(Configuration configuration, List<Integer> carCount, int size) {
         this.configuration = configuration;
@@ -47,7 +47,6 @@ public class Population {
     }
 
     private List<O> crossoverParents(List<O> parent1, List<O> parent2) {
-        // Placeholder: TODO: krzyżowanie rodziców
         List<O> offspring = new ArrayList<>();
         for (int i = 0; i < Math.min(parent1.size(), parent2.size()); i++) {
             offspring.add(crossoverGens(parent1.get(i), parent2.get(i)));
@@ -66,13 +65,11 @@ public class Population {
     }
 
     private int getScore(List<O> individual) {
-        // Placeholder: TODO: implementacja funkcji kosztu
         int score = 0;
         for (O o : individual) {
             score += o.time();
             score += configuration.changeTime();
         }
-        // TODO: dopierdolić karę za nieopróżnienie skrzyżowania, obniżyć gdy się udało
         if (!Solution.willEnd(individual, configuration, carCount)){
             score += 1000;
         }
@@ -80,7 +77,6 @@ public class Population {
     }
 
     private List<List<O>> selectParents() {
-        // Placeholder: TODO: selekcja rodziców (np. turniej, ruletka)
         return individuals.stream()
                 .sorted((o1, o2) -> Integer.compare(getScore(o2), getScore(o1))) // sort descending
                 .limit(individuals.size() / 2)
