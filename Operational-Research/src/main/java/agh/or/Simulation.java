@@ -31,7 +31,7 @@ public class Simulation {
             carCount.add(0);
         }
 
-        carCount = CarListGenerator.createCars(configuration, seed);
+        carCount = CarListGenerator.createCars(configuration);
     }
 
     public Simulation(Configuration configuration, Solution solution, List<Integer> carCount) {

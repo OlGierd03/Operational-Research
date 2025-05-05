@@ -16,10 +16,11 @@ public class CarListGeneratorTest {
                 10,
                 15,
                 30,
-                100
+                100,
+                0L
         );
-        List<Integer> cars1 = agh.or.CarListGenerator.createCars(configuration, 123456789L);
-        List<Integer> cars2 = agh.or.CarListGenerator.createCars(configuration, 123456789L);
+        List<Integer> cars1 = agh.or.CarListGenerator.createCars(configuration);
+        List<Integer> cars2 = agh.or.CarListGenerator.createCars(configuration);
 
         for (int i = 0; i < cars1.size(); i++) {
             assertEquals(cars1.get(i), cars2.get(i), "Cars should be the same for the same seed");

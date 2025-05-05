@@ -12,7 +12,7 @@ public class CarListGenerator {
             carList.add(0);
         }
 
-        Random random = new Random();
+        Random random = new Random(configuration.seed());
 
         for (int i = 0; i < configuration.carCount(); i++) { // Dodajemy samochody do losowych pozycji
             int place = random.nextInt(Lights.LIGHT_COUNT);
@@ -22,19 +22,4 @@ public class CarListGenerator {
         return carList;
     }
 
-    public static List<Integer> createCars(Configuration configuration, long seed) { // to samo co wyżej, ale z seedem
-        List<Integer> carList = new ArrayList<>();
-        for (int i = 0; i < Lights.LIGHT_COUNT; i++) {
-            carList.add(0);
-        }
-
-        Random random = new Random(seed);
-
-        for (int i = 0; i < configuration.carCount(); i++) {
-            int place = random.nextInt(Lights.LIGHT_COUNT);
-            carList.set(place, carList.get(place) + 1);
-        }
-
-        return carList;
-    }
 }

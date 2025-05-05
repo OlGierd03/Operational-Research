@@ -23,10 +23,11 @@ public class PopulationTest {
                 10,
                 15,
                 30,
-                100
+                100,
+                0L
         );
 
-        carCount = CarListGenerator.createCars(configuration, 123456789L);
+        carCount = CarListGenerator.createCars(configuration);
 
     }
 

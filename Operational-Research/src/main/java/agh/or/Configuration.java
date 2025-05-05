@@ -5,6 +5,7 @@ public record Configuration(
         int drivingTime,
         int changeTime,
         int minLightsTime,
-        int maxLightsTime
+        int maxLightsTime,
+        long seed
 ) {
 }

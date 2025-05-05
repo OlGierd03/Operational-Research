@@ -13,10 +13,11 @@ public class Main {
                 10,
                 15,
                 30,
-                100
+                100,
+                0L
         );
 
-        List<Integer> carCount = CarListGenerator.createCars(configuration, 0L);
+        List<Integer> carCount = CarListGenerator.createCars(configuration);
 
         Simulation simulation = new Simulation(configuration, Solution.genetic(configuration, carCount), carCount);
         simulation.run(true);

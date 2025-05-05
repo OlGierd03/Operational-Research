@@ -71,7 +71,7 @@ public class Population {
             score += configuration.changeTime();
         }
         if (!Solution.willEnd(individual, configuration, carCount)){
-            score += 1000;
+            score += 10000;
         }
         return score;
     }
