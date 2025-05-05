@@ -53,8 +53,9 @@ public class Solution {
                 }
             }
         }
+
         for (int i = 0; i < Lights.LIGHT_COUNT; ++i) {
-            if (cars.get(i) > carCount.get(i) * configuration.drivingTime()) {
+            if (cars.get(i) < carCount.get(i) * configuration.drivingTime()) {
                 return false;
             }
         }
