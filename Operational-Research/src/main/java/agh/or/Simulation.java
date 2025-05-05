@@ -54,6 +54,11 @@ public class Simulation {
 
     public void run(boolean print) {
         assert solution.willEnd();
+        if (!solution.willEnd()) {
+            System.out.println("Solution will not end");
+            return;
+        }
+
 
         int time = 0;
 
