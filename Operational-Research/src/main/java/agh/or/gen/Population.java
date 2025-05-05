@@ -3,6 +3,7 @@ package agh.or.gen;
 import agh.or.Configuration;
 import agh.or.O;
 import agh.or.ORandomizer;
+import agh.or.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,11 @@ public class Population {
 
     private final List<List<O>> individuals = new ArrayList<>();
     private final Configuration configuration;
+    private List<Integer> carCount = new ArrayList<>();
 
-    public Population(Configuration configuration, int size) {
+    public Population(Configuration configuration, List<Integer> carCount, int size) {
         this.configuration = configuration;
+        this.carCount = carCount;
         for (int i = 0; i < size; i++) {
             this.individuals.add(ORandomizer.randomize(configuration));
         }
@@ -60,6 +63,9 @@ public class Population {
             score += configuration.changeTime();
         }
         // TODO: dopierdolić karę za nieopróżnienie skrzyżowania, obniżyć gdy się udało
+        if (!Solution.willEnd(individual, configuration, carCount)){
+            score += 1000;
+        }
         return score;
     }
 

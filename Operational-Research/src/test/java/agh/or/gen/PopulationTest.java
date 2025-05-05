@@ -1,5 +1,6 @@
 package agh.or.gen;
 
+import agh.or.CarListGenerator;
 import agh.or.Configuration;
 import agh.or.Lights;
 import agh.or.O;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PopulationTest {
 
     private Configuration configuration;
+    private List<Integer> carCount;
 
     @BeforeEach
     void setUp() {
@@ -24,13 +26,15 @@ public class PopulationTest {
                 100
         );
 
+        carCount = CarListGenerator.createCars(configuration, 123456789L);
+
     }
 
     @Test
     void testPopulationConstructor() {
         int populationSize = 10;
 
-        Population population = new Population(configuration, populationSize);
+        Population population = new Population(configuration, carCount, populationSize);
 
         assertNotNull(population.getIndividuals(), "Lista individuals nie powinna być null");
         assertEquals(populationSize, population.getIndividuals().size(), "Rozmiar populacji powinien być równy przekazanemu rozmiarowi");

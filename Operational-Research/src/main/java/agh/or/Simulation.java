@@ -21,7 +21,27 @@ public class Simulation {
         carCount = CarListGenerator.createCars(configuration);
     }
 
-    private int carCountSum() {
+    public Simulation(Configuration configuration, Solution solution, long seed) {
+        this.configuration = configuration;
+        assert configuration.changeTime() >= configuration.drivingTime();
+
+        this.carCount = new ArrayList<>();
+        this.solution = solution;
+        for(int i = 0; i != 12; ++i){
+            carCount.add(0);
+        }
+
+        carCount = CarListGenerator.createCars(configuration, seed);
+    }
+
+    public Simulation(Configuration configuration, Solution solution, List<Integer> carCount) {
+        this.configuration = configuration;
+        assert configuration.changeTime() >= configuration.drivingTime();
+        this.solution = solution;
+        this.carCount = carCount;
+    }
+
+    private int carCountSum() { // ilość samochodów nadal czekających na przejazd
         return carCount.stream().reduce(0, Integer::sum);
     }
 

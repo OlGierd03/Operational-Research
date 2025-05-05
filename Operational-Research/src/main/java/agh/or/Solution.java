@@ -13,8 +13,8 @@ public class Solution {
         return new Solution(ORandomizer.randomize(configuration));
     }
 
-    public static Solution genetic(Configuration configuration) {
-        return new Solution(new GeneticAlgorithm(configuration).run());
+    public static Solution genetic(Configuration configuration, List<Integer> carCount) {
+        return new Solution(new GeneticAlgorithm(configuration, carCount).run());
     }
 
     public Solution(List<O> values) {
@@ -39,6 +39,26 @@ public class Solution {
             lightsFlag |= o.lights().getState();
         }
         return lightsFlag == ((1 << Lights.LIGHT_COUNT) - 1);
+    }
+
+    public static boolean willEnd(List<O> values, Configuration configuration, List<Integer> carCount) {
+        List<Integer> cars = new ArrayList<>();
+        for (int i = 0; i < Lights.LIGHT_COUNT; ++i) {
+            cars.add(0);
+        }
+        for(O o : values) {
+            for (int i = 0; i < Lights.LIGHT_COUNT; ++i) {
+                if (o.lights().get(i) == 1) {
+                    cars.set(i, cars.get(i) + o.time());
+                }
+            }
+        }
+        for (int i = 0; i < Lights.LIGHT_COUNT; ++i) {
+            if (cars.get(i) > carCount.get(i) * configuration.drivingTime()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean willEnd() {
