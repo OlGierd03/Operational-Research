@@ -30,18 +30,22 @@ public class Population {
         for (List<O> child : offspring) {
             mutateIndividual(child, 0.1);
         }
-        replacePopulation(offspring);
+        replacePopulation(offspring,parents);
     }
 
     private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
+        System.out.println(parents.size());
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
             Collections.shuffle(copy);
             List<O> child = crossoverParents(copy.getFirst(), copy.getLast());
+            List<O> child2 = crossoverParents(copy.getFirst(), copy.getLast());
             copy.removeFirst();
+            if(copy.isEmpty()) break;
             copy.removeLast();
             offspring.add(child);
+            offspring.add(child2);
         }
         return offspring;
     }
@@ -91,9 +95,14 @@ public class Population {
         }
     }
 
-    private void replacePopulation(List<List<O>> newGeneration) {
+    private void replacePopulation(List<List<O>> newGeneration, List<List<O>> oldGeneration) {
+        List<List<O>> oldGenerationHalf = oldGeneration.stream()
+                .sorted((o1, o2) -> Integer.compare(getScore(o2), getScore(o1))) // sort descending
+                .limit(3L * oldGeneration.size() / 4)
+                .toList();
         individuals.clear();
         individuals.addAll(newGeneration);
+        individuals.addAll(oldGenerationHalf);
     }
 
     public List<List<O>> getIndividuals() {
