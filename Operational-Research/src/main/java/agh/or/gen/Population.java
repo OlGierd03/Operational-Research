@@ -5,10 +5,7 @@ import agh.or.O;
 import agh.or.ORandomizer;
 import agh.or.Solution;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Population {
 
@@ -30,11 +27,10 @@ public class Population {
         for (List<O> child : offspring) {
             mutateIndividual(child, 0.1);
         }
-        replacePopulation(offspring,parents);
+        replacePopulation(offspring, parents);
     }
 
     private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
-        System.out.println(parents.size());
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
@@ -82,7 +78,7 @@ public class Population {
 
     private List<List<O>> selectParents() {
         return individuals.stream()
-                .sorted((o1, o2) -> Integer.compare(getScore(o2), getScore(o1))) // sort descending
+                .sorted((o1, o2) -> Integer.compare(getScore(o1), getScore(o2))) // sort ascending
                 .limit(individuals.size() / 2)
                 .toList();
     }
@@ -95,14 +91,10 @@ public class Population {
         }
     }
 
-    private void replacePopulation(List<List<O>> newGeneration, List<List<O>> oldGeneration) {
-        List<List<O>> oldGenerationHalf = oldGeneration.stream()
-                .sorted((o1, o2) -> Integer.compare(getScore(o2), getScore(o1))) // sort descending
-                .limit(3L * oldGeneration.size() / 4)
-                .toList();
+    private void replacePopulation(List<List<O>> newGeneration, List<List<O>> parents) {
         individuals.clear();
         individuals.addAll(newGeneration);
-        individuals.addAll(oldGenerationHalf);
+        individuals.addAll(parents);
     }
 
     public List<List<O>> getIndividuals() {
@@ -111,7 +103,7 @@ public class Population {
 
     public List<O> getBest() {
         return individuals.stream()
-                .max((o1, o2) -> Integer.compare(getScore(o1), getScore(o2)))
+                .min(Comparator.comparingInt(this::getScore))
                 .orElseThrow(() -> new RuntimeException("No individuals in population"));
     }
 }
