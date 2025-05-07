@@ -2,20 +2,11 @@ package agh.or;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Simulation {
     private Configuration configuration;
     private List<Integer> carCount;
     private Solution solution;
-
-    private void createCars() {
-        Random rand = new Random();
-        for(int i = 0; i != configuration.carCount(); ++i) {
-            var place = rand.nextInt(Lights.LIGHT_COUNT);
-            carCount.set(place, carCount.get(place) + 1);
-        }
-    }
 
     public Simulation(Configuration configuration, Solution solution) {
         this.configuration = configuration;
@@ -26,10 +17,31 @@ public class Simulation {
         for(int i = 0; i != 12; ++i){
             carCount.add(0);
         }
-        this.createCars();
+
+        carCount = CarListGenerator.createCars(configuration);
     }
 
-    private int carCountSum() {
+    public Simulation(Configuration configuration, Solution solution, long seed) {
+        this.configuration = configuration;
+        assert configuration.changeTime() >= configuration.drivingTime();
+
+        this.carCount = new ArrayList<>();
+        this.solution = solution;
+        for(int i = 0; i != 12; ++i){
+            carCount.add(0);
+        }
+
+        carCount = CarListGenerator.createCars(configuration);
+    }
+
+    public Simulation(Configuration configuration, Solution solution, List<Integer> carCount) {
+        this.configuration = configuration;
+        assert configuration.changeTime() >= configuration.drivingTime();
+        this.solution = solution;
+        this.carCount = carCount;
+    }
+
+    private int carCountSum() { // ilość samochodów nadal czekających na przejazd
         return carCount.stream().reduce(0, Integer::sum);
     }
 
@@ -42,6 +54,11 @@ public class Simulation {
 
     public void run(boolean print) {
         assert solution.willEnd();
+        if (!solution.willEnd()) {
+            System.out.println("Solution will not end");
+            return;
+        }
+
 
         int time = 0;
 
