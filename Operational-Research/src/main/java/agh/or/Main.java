@@ -1,5 +1,7 @@
 package agh.or;
 
+import agh.or.records.Configuration;
+
 import java.util.List;
 
 public class Main {

@@ -1,4 +1,4 @@
-package agh.or;
+package agh.or.records;
 
 public record Configuration(
         int carCount,

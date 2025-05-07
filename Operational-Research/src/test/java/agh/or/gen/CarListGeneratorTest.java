@@ -1,6 +1,6 @@
 package agh.or.gen;
 
-import agh.or.Configuration;
+import agh.or.records.Configuration;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class CarListGeneratorTest {
 
     @Test
     public void seededTest() {
-        Configuration configuration = new agh.or.Configuration(
+        Configuration configuration = new Configuration(
                 10,
                 10,
                 15,

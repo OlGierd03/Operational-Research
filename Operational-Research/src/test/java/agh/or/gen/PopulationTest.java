@@ -1,9 +1,9 @@
 package agh.or.gen;
 
 import agh.or.CarListGenerator;
-import agh.or.Configuration;
+import agh.or.records.Configuration;
 import agh.or.Lights;
-import agh.or.O;
+import agh.or.records.O;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

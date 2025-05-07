@@ -1,5 +1,7 @@
 package agh.or;
 
+import agh.or.records.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 

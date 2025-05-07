@@ -1,5 +1,8 @@
 package agh.or;
 
+import agh.or.records.Configuration;
+import agh.or.records.O;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

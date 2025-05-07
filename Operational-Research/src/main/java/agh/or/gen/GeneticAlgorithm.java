@@ -1,7 +1,7 @@
 package agh.or.gen;
 
-import agh.or.Configuration;
-import agh.or.O;
+import agh.or.records.Configuration;
+import agh.or.records.O;
 
 import java.util.List;
 
