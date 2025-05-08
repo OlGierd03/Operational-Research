@@ -1,8 +1,8 @@
 package agh.or;
 
+import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
@@ -10,37 +10,12 @@ public class Simulation {
     private List<Integer> carCount;
     private Solution solution;
 
-    public Simulation(Configuration configuration, Solution solution) {
-        this.configuration = configuration;
+    public Simulation(Solution solution) {
+        this.configuration = ConfigurationGlobal.getInstance().getConfiguration();
         assert configuration.changeTime() >= configuration.drivingTime();
 
-        this.carCount = new ArrayList<>();
+        this.carCount = ConfigurationGlobal.getInstance().getCarList();
         this.solution = solution;
-        for(int i = 0; i != 12; ++i){
-            carCount.add(0);
-        }
-
-        carCount = CarListGenerator.createCars(configuration);
-    }
-
-    public Simulation(Configuration configuration, Solution solution, long seed) {
-        this.configuration = configuration;
-        assert configuration.changeTime() >= configuration.drivingTime();
-
-        this.carCount = new ArrayList<>();
-        this.solution = solution;
-        for(int i = 0; i != 12; ++i){
-            carCount.add(0);
-        }
-
-        carCount = CarListGenerator.createCars(configuration);
-    }
-
-    public Simulation(Configuration configuration, Solution solution, List<Integer> carCount) {
-        this.configuration = configuration;
-        assert configuration.changeTime() >= configuration.drivingTime();
-        this.solution = solution;
-        this.carCount = carCount;
     }
 
     private int carCountSum() { // ilość samochodów nadal czekających na przejazd
