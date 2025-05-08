@@ -19,7 +19,7 @@ public class Simulation {
     private void printCars() {
         System.out.println("Cars on lanes:");
         for(int i = 0; i != Lights.LIGHT_COUNT; ++i) {
-            System.out.println("%d: %d".formatted(i, ConfigurationGlobal.getCarList().get(i)));
+            System.out.printf("%d: %d%n", i, ConfigurationGlobal.getCarList().get(i));
         }
     }
 
@@ -38,7 +38,7 @@ public class Simulation {
         if(print) {
             System.out.println("Solution:");
             for(var o : solution.getValues()){
-                System.out.println("%s; %d".formatted(o.lights().toString(), o.time()));
+                System.out.printf("%s; %d%n", o.lights().toString(), o.time());
             }
 
             System.out.println();
@@ -63,8 +63,8 @@ public class Simulation {
             time += configuration.changeTime();
 
             if(print) {
-                System.out.println("\nt = %d".formatted(time));
-                System.out.println("Lights:\n%s; %d".formatted(lights.toString(), lightsTime));
+                System.out.printf("\nt = %d%n", time);
+                System.out.printf("Lights:\n%s; %d%n", lights.toString(), lightsTime);
                 printCars();
             }
         }
