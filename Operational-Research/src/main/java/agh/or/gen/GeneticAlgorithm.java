@@ -13,8 +13,7 @@ public class GeneticAlgorithm {
     }
 
     public List<O> run() {
-        int generationCount = ConfigurationGlobal.getInstance().getConfiguration().generationCount();
-        for (int i = 0; i < generationCount; i++) {
+        for (int i = 0; i < ConfigurationGlobal.getGenerationCount(); i++) {
             population.nextGeneration();
         }
         System.out.println(population.getBest());
