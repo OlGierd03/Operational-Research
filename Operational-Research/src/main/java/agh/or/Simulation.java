@@ -6,26 +6,20 @@ import agh.or.records.Configuration;
 import java.util.List;
 
 public class Simulation {
-    private Configuration configuration;
-    private List<Integer> carCount;
-    private Solution solution;
+    private final Solution solution;
 
     public Simulation(Solution solution) {
-        this.configuration = ConfigurationGlobal.getInstance().getConfiguration();
-        assert configuration.changeTime() >= configuration.drivingTime();
-
-        this.carCount = ConfigurationGlobal.getInstance().getCarList();
         this.solution = solution;
     }
 
     private int carCountSum() { // ilość samochodów nadal czekających na przejazd
-        return carCount.stream().reduce(0, Integer::sum);
+        return ConfigurationGlobal.getCarList().stream().reduce(0, Integer::sum);
     }
 
     private void printCars() {
         System.out.println("Cars on lanes:");
         for(int i = 0; i != Lights.LIGHT_COUNT; ++i) {
-            System.out.println("%d: %d".formatted(i, carCount.get(i)));
+            System.out.println("%d: %d".formatted(i, ConfigurationGlobal.getCarList().get(i)));
         }
     }
 
@@ -38,6 +32,8 @@ public class Simulation {
 
 
         int time = 0;
+        List<Integer> carList = ConfigurationGlobal.getCarList();
+        Configuration configuration = ConfigurationGlobal.getConfiguration();
 
         if(print) {
             System.out.println("Solution:");
@@ -55,13 +51,13 @@ public class Simulation {
 
             int carsOnGreen = lightsTime / configuration.drivingTime();
             for(var lane : lights.on()) {
-                carCount.set(lane, Math.max(carCount.get(lane) - carsOnGreen, 0));
+                carList.set(lane, Math.max(carList.get(lane) - carsOnGreen, 0));
             }
             time += lightsTime;
 
             if(lightsTime % configuration.drivingTime() != 0) {
                 for(var lane : lights.on()) {
-                    carCount.set(lane, Math.max(carCount.get(lane) - 1, 0));
+                    carList.set(lane, Math.max(carList.get(lane) - 1, 0));
                 }
             }
             time += configuration.changeTime();

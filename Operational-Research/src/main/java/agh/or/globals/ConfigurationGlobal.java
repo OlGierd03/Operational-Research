@@ -42,11 +42,11 @@ public class ConfigurationGlobal {
         return instance;
     }
 
-    public Configuration getConfiguration() {
+    public static Configuration getConfiguration() {
         return configuration;
     }
 
-    public List<Integer> getCarList() {
+    public static List<Integer> getCarList() {
         return carList;
     }
 
