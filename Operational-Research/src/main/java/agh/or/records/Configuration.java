@@ -6,6 +6,8 @@ public record Configuration(
         int changeTime,
         int minLightsTime,
         int maxLightsTime,
+        int generationCount,
+        int populationSize,
         long seed
 ) {
 }
