@@ -17,8 +17,6 @@ public class Solution {
     }
 
     public static Solution genetic() {
-        Configuration configuration = ConfigurationGlobal.getInstance().getConfiguration();
-        List<Integer> carCount = ConfigurationGlobal.getInstance().getCarList();
         return new Solution(new GeneticAlgorithm().run());
     }
 
