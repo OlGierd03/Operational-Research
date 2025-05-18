@@ -15,8 +15,6 @@ public class GeneticAlgorithm {
     }
 
     public List<O> run() {
-        System.out.println("Best before:");
-        System.out.println(population.getBest());
         for (int i = 0; i < GENERATIONS_NUM; i++) {
             population.nextGeneration();
         }

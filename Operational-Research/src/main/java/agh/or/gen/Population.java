@@ -28,7 +28,7 @@ public class Population {
         List<List<O>> offspring = crossoverInGeneration(parents);
         for (List<O> child : offspring) {
             mutateIndividual(child, 0.1);
-            Solution.fixList(child, configuration);
+            //Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
     }
@@ -114,6 +114,7 @@ public class Population {
     public List<O> getBest() {
         return individuals.stream()
                 .min(Comparator.comparingInt(this::getScore))
+                .map(min -> Solution.fixList(min, configuration))
                 .orElseThrow(() -> new RuntimeException("No individuals in population"));
     }
 }
