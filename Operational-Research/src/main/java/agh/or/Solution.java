@@ -90,7 +90,6 @@ public class Solution {
     }
 
     public static List<O> fixList(List<O> values, Configuration configuration) {
-        List<O> result = new ArrayList<>(values);
         var missing = getMissingList(values);
         var valids = LightsSets.getValids();
         if(rng == null){
@@ -120,7 +119,7 @@ public class Solution {
 
         }
 
-        return result;
+        return values;
     }
 
     public Solution fix(Configuration configuration) {
