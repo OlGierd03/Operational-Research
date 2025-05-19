@@ -5,7 +5,12 @@ import agh.or.records.Configuration;
 
 public class Main {
     public static void main(String[] args) {
-
+        /*for (var invalidLight : LightsSets.getValids()){
+            System.out.println(invalidLight);
+        }
+        System.out.println(LightsSets.getValids().size());*/
+        long seed = System.currentTimeMillis();
+        System.out.println("Seed: " + seed);
         Configuration configuration = new Configuration(
                 Lights.LIGHT_COUNT * 5,
                 10,
@@ -14,7 +19,7 @@ public class Main {
                 100,
                 15,
                 120,
-                420L
+                seed
         );
 
         ConfigurationGlobal.setInstance(configuration);

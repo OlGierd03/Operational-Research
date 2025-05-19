@@ -16,6 +16,7 @@ public class GeneticAlgorithm {
         for (int i = 0; i < ConfigurationGlobal.getGenerationCount(); i++) {
             population.nextGeneration();
         }
+        System.out.println("Best after:");
         System.out.println(population.getBest());
         return population.getBest();
     }
