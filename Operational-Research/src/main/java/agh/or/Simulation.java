@@ -27,7 +27,7 @@ public class Simulation {
         //assert solution.willEnd();
         if (!solution.willEnd()) {
             System.out.println("Solution will not end");
-            System.out.println(solution.fix(configuration).willEnd());
+            System.out.println(solution.fix(ConfigurationGlobal.getConfiguration()).willEnd());
             System.out.println(solution.getValues());
             return;
         }
