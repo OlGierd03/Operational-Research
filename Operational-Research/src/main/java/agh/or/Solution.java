@@ -1,6 +1,7 @@
 package agh.or;
 
 import agh.or.gen.GeneticAlgorithm;
+import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 import agh.or.records.O;
 
@@ -14,8 +15,8 @@ public class Solution {
         return new Solution(ORandomizer.randomize(configuration));
     }
 
-    public static Solution genetic(Configuration configuration, List<Integer> carCount) {
-        return new Solution(new GeneticAlgorithm(configuration, carCount).run());
+    public static Solution genetic() {
+        return new Solution(new GeneticAlgorithm().run());
     }
 
     public Solution(List<O> values) {

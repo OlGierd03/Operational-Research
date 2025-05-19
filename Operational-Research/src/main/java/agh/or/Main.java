@@ -1,8 +1,7 @@
 package agh.or;
 
+import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
-
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,12 +17,14 @@ public class Main {
                 15,
                 30,
                 100,
+                15,
+                120,
                 seed
         );
 
-        List<Integer> carCount = CarListGenerator.createCars(configuration);
+        ConfigurationGlobal.setInstance(configuration);
 
-        Simulation simulation = new Simulation(configuration, Solution.genetic(configuration, carCount), carCount);
+        Simulation simulation = new Simulation(Solution.genetic());
         simulation.run(true);
     }
 }

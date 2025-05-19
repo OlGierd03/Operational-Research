@@ -24,6 +24,8 @@ public class PopulationTest {
                 15,
                 30,
                 100,
+                15,
+                120,
                 0L
         );
 
@@ -35,7 +37,7 @@ public class PopulationTest {
     void testPopulationConstructor() {
         int populationSize = 10;
 
-        Population population = new Population(configuration, carCount, populationSize);
+        Population population = new Population();
 
         assertNotNull(population.getIndividuals(), "Lista individuals nie powinna być null");
         assertEquals(populationSize, population.getIndividuals().size(), "Rozmiar populacji powinien być równy przekazanemu rozmiarowi");

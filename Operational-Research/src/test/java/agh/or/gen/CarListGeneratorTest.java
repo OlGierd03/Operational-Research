@@ -17,6 +17,8 @@ public class CarListGeneratorTest {
                 15,
                 30,
                 100,
+                15,
+                120,
                 0L
         );
         List<Integer> cars1 = agh.or.CarListGenerator.createCars(configuration);

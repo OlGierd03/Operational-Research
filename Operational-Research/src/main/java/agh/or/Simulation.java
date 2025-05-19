@@ -1,56 +1,25 @@
 package agh.or;
 
+import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation {
-    private Configuration configuration;
-    private List<Integer> carCount;
-    private Solution solution;
+    private final Solution solution;
 
-    public Simulation(Configuration configuration, Solution solution) {
-        this.configuration = configuration;
-        assert configuration.changeTime() >= configuration.drivingTime();
-
-        this.carCount = new ArrayList<>();
+    public Simulation(Solution solution) {
         this.solution = solution;
-        for(int i = 0; i != 12; ++i){
-            carCount.add(0);
-        }
-
-        carCount = CarListGenerator.createCars(configuration);
-    }
-
-    public Simulation(Configuration configuration, Solution solution, long seed) {
-        this.configuration = configuration;
-        assert configuration.changeTime() >= configuration.drivingTime();
-
-        this.carCount = new ArrayList<>();
-        this.solution = solution;
-        for(int i = 0; i != 12; ++i){
-            carCount.add(0);
-        }
-
-        carCount = CarListGenerator.createCars(configuration);
-    }
-
-    public Simulation(Configuration configuration, Solution solution, List<Integer> carCount) {
-        this.configuration = configuration;
-        assert configuration.changeTime() >= configuration.drivingTime();
-        this.solution = solution;
-        this.carCount = carCount;
     }
 
     private int carCountSum() { // ilość samochodów nadal czekających na przejazd
-        return carCount.stream().reduce(0, Integer::sum);
+        return ConfigurationGlobal.getCarList().stream().reduce(0, Integer::sum);
     }
 
     private void printCars() {
         System.out.println("Cars on lanes:");
         for(int i = 0; i != Lights.LIGHT_COUNT; ++i) {
-            System.out.println("%d: %d".formatted(i, carCount.get(i)));
+            System.out.printf("%d: %d%n", i, ConfigurationGlobal.getCarList().get(i));
         }
     }
 
@@ -65,11 +34,13 @@ public class Simulation {
 
 
         int time = 0;
+        List<Integer> carList = ConfigurationGlobal.getCarList();
+        Configuration configuration = ConfigurationGlobal.getConfiguration();
 
         if(print) {
             System.out.println("Solution:");
             for(var o : solution.getValues()){
-                System.out.println("%s; %d".formatted(o.lights().toString(), o.time()));
+                System.out.printf("%s; %d%n", o.lights().toString(), o.time());
             }
 
             System.out.println();
@@ -82,20 +53,20 @@ public class Simulation {
 
             int carsOnGreen = lightsTime / configuration.drivingTime();
             for(var lane : lights.on()) {
-                carCount.set(lane, Math.max(carCount.get(lane) - carsOnGreen, 0));
+                carList.set(lane, Math.max(carList.get(lane) - carsOnGreen, 0));
             }
             time += lightsTime;
 
             if(lightsTime % configuration.drivingTime() != 0) {
                 for(var lane : lights.on()) {
-                    carCount.set(lane, Math.max(carCount.get(lane) - 1, 0));
+                    carList.set(lane, Math.max(carList.get(lane) - 1, 0));
                 }
             }
             time += configuration.changeTime();
 
             if(print) {
-                System.out.println("\nt = %d".formatted(time));
-                System.out.println("Lights:\n%s; %d".formatted(lights.toString(), lightsTime));
+                System.out.printf("\nt = %d%n", time);
+                System.out.printf("Lights:\n%s; %d%n", lights.toString(), lightsTime);
                 printCars();
             }
         }
