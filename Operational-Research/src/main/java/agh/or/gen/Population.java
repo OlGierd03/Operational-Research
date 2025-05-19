@@ -28,6 +28,7 @@ public class Population {
         List<List<O>> offspring = crossoverInGeneration(parents);
         for (List<O> child : offspring) {
             mutateIndividual(child, 0.1);
+            Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
     }
@@ -50,19 +51,26 @@ public class Population {
 
     private List<O> crossoverParents(List<O> parent1, List<O> parent2) {
         List<O> offspring = new ArrayList<>();
-        for (int i = 0; i < Math.min(parent1.size(), parent2.size()); i++) {
-            offspring.add(crossoverGens(parent1.get(i), parent2.get(i)));
+        int genomeLength = random.nextInt(Math.min(parent1.size(), parent2.size()), Math.max(parent1.size(), parent2.size()) + 1);
+        for (int i = 0; i < genomeLength; i++) {
+            offspring.add(crossoverGens(parent1, parent2, i));
         }
-        return offspring;
+
+        return offspring;//Solution.fixList(offspring, configuration);
     }
 
-    private O crossoverGens(O gen1, O gen2) {
+    private O crossoverGens(List<O> parent1, List<O> parent2, int i) {
+        var maxParent = parent1.size() < parent2.size() ? parent2 : parent1;
 
-        if (random.nextInt(100) > 60){
-            return gen1;
+        try {
+            if (random.nextInt(100) > 50) {
+                return parent1.get(i);
+            } else {
+                return parent2.get(i);
+            }
         }
-        else {
-            return gen2;
+        catch (IndexOutOfBoundsException e) {
+            return maxParent.get(i);
         }
     }
 
@@ -106,6 +114,7 @@ public class Population {
     public List<O> getBest() {
         return individuals.stream()
                 .min(Comparator.comparingInt(this::getScore))
+                .map(min -> Solution.fixList(min, configuration))
                 .orElseThrow(() -> new RuntimeException("No individuals in population"));
     }
 }

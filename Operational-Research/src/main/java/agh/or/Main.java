@@ -10,13 +10,15 @@ public class Main {
             System.out.println(invalidLight);
         }
         System.out.println(LightsSets.getValids().size());*/
+        long seed = System.currentTimeMillis();
+        System.out.println("Seed: " + seed);
         Configuration configuration = new Configuration(
                 Lights.LIGHT_COUNT * 5,
                 10,
                 15,
                 30,
                 100,
-                0L
+                seed
         );
 
         List<Integer> carCount = CarListGenerator.createCars(configuration);
