@@ -28,7 +28,7 @@ public class Population {
         List<List<O>> offspring = crossoverInGeneration(parents);
         for (List<O> child : offspring) {
             mutateIndividual(child, 0.1);
-            //Solution.fixList(child, configuration);
+            Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
     }
