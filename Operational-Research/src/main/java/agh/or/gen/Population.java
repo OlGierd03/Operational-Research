@@ -1,5 +1,6 @@
 package agh.or.gen;
 
+import agh.or.Simulation;
 import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 import agh.or.records.O;
@@ -16,8 +17,8 @@ public class Population {
     private Random random;
 
     public Population() {
-        this.configuration = ConfigurationGlobal.getInstance().getConfiguration();
-        this.carCount = ConfigurationGlobal.getInstance().getCarList();
+        this.configuration = ConfigurationGlobal.getConfiguration();
+        this.carCount = ConfigurationGlobal.getCarList();
         this.random = new Random(configuration.seed());
 
         for (int i = 0; i < configuration.populationSize() ; i++) {

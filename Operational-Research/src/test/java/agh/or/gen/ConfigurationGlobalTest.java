@@ -36,7 +36,7 @@ public class ConfigurationGlobalTest {
 
     @Test
     void testGetters() {
-        assertNotNull(ConfigurationGlobal.getInstance(), "ConfigurationGlobal instance should not be null");
+        assertNotNull(ConfigurationGlobal.getConfiguration(), "ConfigurationGlobal instance should not be null");
         assertEquals(CAR_COUNT, ConfigurationGlobal.getCarCount(), "Car count should match");
         assertEquals(DRIVING_TIME, ConfigurationGlobal.getDrivingTime(), "Driving time should match");
         assertEquals(CHANGE_TIME, ConfigurationGlobal.getChangeTime(), "Change time should match");

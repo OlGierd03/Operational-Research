@@ -4,7 +4,7 @@ import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /*for (var invalidLight : LightsSets.getValids()){
             System.out.println(invalidLight);
         }
@@ -17,14 +17,17 @@ public class Main {
                 15,
                 30,
                 100,
-                15,
+                100,
                 120,
                 seed
         );
 
         ConfigurationGlobal.setInstance(configuration);
 
-        Simulation simulation = new Simulation(Solution.genetic());
-        simulation.run(true);
+        Solution solution = Solution.genetic();
+        if(solution.willEnd()){
+            Simulation simulation = new Simulation(solution);
+            System.out.println(simulation.run(true));
+        }
     }
 }
