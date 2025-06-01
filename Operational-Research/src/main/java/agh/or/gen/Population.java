@@ -76,6 +76,18 @@ public class Population {
         }
     }
 
+    public int getBestScore() {
+        return getScore(getBest());
+    }
+
+    public double getAverageScore() {
+        return individuals.stream()
+                .map(this::getScore)
+                .map(Double::valueOf)
+                .reduce(Double::sum)
+                .orElse(Double.NaN) / individuals.size();
+    }
+
     private int getScore(List<O> individual) {
         int score = 0;
         for (O o : individual) {
