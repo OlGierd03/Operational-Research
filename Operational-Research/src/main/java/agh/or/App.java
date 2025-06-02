@@ -146,11 +146,15 @@ public class App extends Application {
 
         LineChart<Number, Number> bestChart = new LineChart<>(xAxis1, yAxis1);
         bestChart.setTitle("Najlepszy wynik w populacji");
-        bestChart.setCreateSymbols(false);;
+        bestChart.setCreateSymbols(false);
+        bestChart.setAnimated(false);
+        bestChart.setMinWidth(600);
 
         LineChart<Number, Number> avgChart = new LineChart<>(xAxis2, yAxis2);
         avgChart.setTitle("Średni wynik w populacji");
         avgChart.setCreateSymbols(false);
+        avgChart.setAnimated(false);
+        avgChart.setMinWidth(600);
 
         XYChart.Series<Number, Number> bestSeries = new XYChart.Series<>();
         bestSeries.setName("Najlepszy");
@@ -169,8 +173,9 @@ public class App extends Application {
             yAxis1.setLowerBound(bestBounds.minY);
             yAxis1.setUpperBound(bestBounds.maxY);
 
+            xAxis1.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
             yAxis1.setTickUnit((bestBounds.maxY - bestBounds.minY) / 10.0);
-//            System.out.println(yAxis1.getTickUnit());
+            System.out.println(yAxis1.getTickUnit());
         }
 
         if (avgBounds != null) {
@@ -179,14 +184,15 @@ public class App extends Application {
             yAxis2.setLowerBound(avgBounds.minY);
             yAxis2.setUpperBound(avgBounds.maxY);
 
+            xAxis2.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
             yAxis2.setTickUnit((avgBounds.maxY - avgBounds.minY) / 10.0);
-//            System.out.println(yAxis2.getTickUnit());
+            System.out.println(yAxis2.getTickUnit());
         }
 
         HBox chartsBox = new HBox(10, bestChart, avgChart);
         chartsBox.setPadding(new Insets(10));
 
-        Scene scene = new Scene(chartsBox, 1000, 600);
+        Scene scene = new Scene(chartsBox, 1230, 600);
         chartStage.setScene(scene);
         chartStage.show();
     }
