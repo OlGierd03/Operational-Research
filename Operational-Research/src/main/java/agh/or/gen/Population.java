@@ -91,14 +91,19 @@ public class Population {
 
     private int getScore(List<O> individual) {
         int score = 0;
-        for (O o : individual) {
-            score += o.time();
-            score += configuration.changeTime();
+        Solution solution = new Solution(new ArrayList<>(individual));
+
+        boolean doubleFlag = !solution.willEnd();
+        if(doubleFlag) {
+            solution.fix(ConfigurationGlobal.getConfiguration());
         }
-        if (!Solution.willEnd(individual, configuration, carCount)){
-            score += 10000;
-        }
-        return score;
+
+        assert solution.willEnd();
+        score = new Simulation(solution).run(false);
+
+//        System.out.println("%d\t%d".formatted(individual.size(), solution.size()));
+
+        return doubleFlag ? score * 2 : score;
     }
 
     private List<List<O>> selectParents() {
