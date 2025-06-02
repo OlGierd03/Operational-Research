@@ -132,16 +132,17 @@ public class App extends Application {
 
         NumberAxis xAxis1 = new NumberAxis();
         xAxis1.setLabel("Pokolenie");
+        xAxis1.setAutoRanging(false);
         NumberAxis yAxis1 = new NumberAxis();
         yAxis1.setLabel("Wynik");
         yAxis1.setAutoRanging(false);
 
         NumberAxis xAxis2 = new NumberAxis();
         xAxis2.setLabel("Pokolenie");
+        xAxis2.setAutoRanging(false);
         NumberAxis yAxis2 = new NumberAxis();
         yAxis2.setLabel("Wynik");
         yAxis2.setAutoRanging(false);
-        yAxis2.setTickUnit(yAxis2.getTickUnit() / 10.0);
 
         LineChart<Number, Number> bestChart = new LineChart<>(xAxis1, yAxis1);
         bestChart.setTitle("Najlepszy wynik w populacji");
@@ -163,23 +164,23 @@ public class App extends Application {
         avgChart.getData().add(avgSeries);
 
         if (bestBounds != null) {
-            xAxis1.setLowerBound(bestBounds.minX);
-            xAxis1.setUpperBound(bestBounds.maxX);
+            xAxis1.setLowerBound(0);
+            xAxis1.setUpperBound(ConfigurationGlobal.getGenerationCount());
             yAxis1.setLowerBound(bestBounds.minY);
             yAxis1.setUpperBound(bestBounds.maxY);
 
             yAxis1.setTickUnit((bestBounds.maxY - bestBounds.minY) / 10.0);
-            System.out.println(yAxis1.getTickUnit());
+//            System.out.println(yAxis1.getTickUnit());
         }
 
         if (avgBounds != null) {
-            xAxis2.setLowerBound(avgBounds.minX);
-            xAxis2.setUpperBound(avgBounds.maxX);
+            xAxis2.setLowerBound(0);
+            xAxis2.setUpperBound(ConfigurationGlobal.getGenerationCount());
             yAxis2.setLowerBound(avgBounds.minY);
             yAxis2.setUpperBound(avgBounds.maxY);
 
             yAxis2.setTickUnit((avgBounds.maxY - avgBounds.minY) / 10.0);
-            System.out.println(yAxis2.getTickUnit());
+//            System.out.println(yAxis2.getTickUnit());
         }
 
         HBox chartsBox = new HBox(10, bestChart, avgChart);
