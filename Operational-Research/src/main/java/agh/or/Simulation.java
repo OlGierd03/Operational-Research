@@ -27,7 +27,7 @@ public class Simulation {
         }
     }
 
-    public int run(boolean print) throws Exception {
+    public int run(boolean print) {
         assert solution.willEnd();
         if (!solution.willEnd()) {
             System.out.println("Solution will not end");
@@ -74,7 +74,9 @@ public class Simulation {
                 printCars();
             }
         }
-        System.out.println("t = %d".formatted(time));
+        if(print) {
+            System.out.println("t = %d".formatted(time));
+        }
 
         return time;
     }
