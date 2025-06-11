@@ -30,7 +30,7 @@ public class Population {
         List<List<O>> parents = selectParents();
         List<List<O>> offspring = crossoverInGeneration(parents);
         for (List<O> child : offspring) {
-            mutateIndividual(child, 0.1);
+            mutateIndividual(child, 0.01);
             Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
@@ -117,6 +117,15 @@ public class Population {
         for (int i = 0; i < individual.size(); i++) {
             if (random.nextDouble() <= mutationChance) {
                 individual.set(i, ORandomizer.randomize(configuration).get(0));
+            }
+        }
+    }
+
+    private void mutateIndividualDel(List<O> individual, double mutationChance) {
+        for (int i = 0; i < individual.size(); i++) {
+            if (random.nextDouble() <= mutationChance) {
+                individual.remove(i);
+                i--;
             }
         }
     }
