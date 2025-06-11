@@ -1,5 +1,6 @@
 package agh.or.gen;
 
+import agh.or.Simulation;
 import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 import agh.or.records.O;
@@ -16,8 +17,8 @@ public class Population {
     private Random random;
 
     public Population() {
-        this.configuration = ConfigurationGlobal.getInstance().getConfiguration();
-        this.carCount = ConfigurationGlobal.getInstance().getCarList();
+        this.configuration = ConfigurationGlobal.getConfiguration();
+        this.carCount = ConfigurationGlobal.getCarList();
         this.random = new Random(configuration.seed());
 
         for (int i = 0; i < configuration.populationSize() ; i++) {
@@ -76,16 +77,33 @@ public class Population {
         }
     }
 
+    public int getBestScore() {
+        return getScore(getBest());
+    }
+
+    public double getAverageScore() {
+        return individuals.stream()
+                .map(this::getScore)
+                .map(Double::valueOf)
+                .reduce(Double::sum)
+                .orElse(Double.NaN) / individuals.size();
+    }
+
     private int getScore(List<O> individual) {
         int score = 0;
-        for (O o : individual) {
-            score += o.time();
-            score += configuration.changeTime();
+        Solution solution = new Solution(new ArrayList<>(individual));
+
+        boolean doubleFlag = !solution.willEnd();
+        if(doubleFlag) {
+            solution.fix(ConfigurationGlobal.getConfiguration());
         }
-        if (!Solution.willEnd(individual, configuration, carCount)){
-            score += 10000;
-        }
-        return score;
+
+        assert solution.willEnd();
+        score = new Simulation(solution).run(false);
+
+//        System.out.println("%d\t%d".formatted(individual.size(), solution.size()));
+
+        return doubleFlag ? score * 2 : score;
     }
 
     private List<List<O>> selectParents() {

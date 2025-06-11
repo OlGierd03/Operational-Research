@@ -1,18 +1,52 @@
 plugins {
     id 'java'
+    id 'application'
+    // The OpenJFX plugin makes it trivial to pull JavaFX modules
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group = 'agh.or'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = '21'   // or 17, 21, etc., matching your JDK
 
 repositories {
     mavenCentral()
 }
 
+javafx {
+    // Pick the JavaFX version you want (e.g. 20).
+    // The plugin automatically creates a configuration named 'javafxSdk'.
+    version = '20'
+    // Only the modules you need:
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
 dependencies {
+    // Your other dependencies (e.g. testing, Gson, etc.)
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    // ----- REMOVE any manual "org.openjfx:javafx-*" lines below. -----
+    // (The OpenJFX plugin will automatically add javafx-controls, javafx-fxml, etc.)
 }
+
+application {
+    // Make sure this matches the fully‐qualified name of your class that extends javafx.application.Application.
+    // In my example earlier, it was in package 'agh.or.app' and called 'MainApp'.
+    mainClass = 'agh.or.App'
+}
+
+//tasks.named('run', JavaExec) {
+//    // The OpenJFX plugin has already produced a configuration named 'javafxSdk', so at runtime
+//    // we have to put those jars on the module path and enable the modules we declared above.
+//    // This snippet ensures the JVM arguments are set before launching.
+//    doFirst {
+//        jvmArgs = [
+//                "--module-path", configurations.javafxSdk.asPath,
+//                "--add-modules", javafx.modules.join(',')
+//        ]
+//    }
+//}
 
 test {
     useJUnitPlatform()
