@@ -1,5 +1,7 @@
 package agh.or;
 
+import agh.or.gen.ParentSelectionType;
+import agh.or.gen.Population;
 import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 import agh.or.Solution;
@@ -53,6 +55,11 @@ public class App extends Application {
 
         Label seedLabel = new Label("Seed:");
         TextField seedField = new TextField(Long.toString(System.currentTimeMillis()));
+
+        Label parentSelectionLabel = new Label("Algorytm selekcji rodziców:");
+        ComboBox<String> parentSelectionCombo = new ComboBox<>();
+        parentSelectionCombo.getItems().addAll("Ruletka", "Turniej", "Ranking");
+        parentSelectionCombo.setValue("Ranking");
 
         Label configModeLabel = new Label("Tryb konfiguracji:");
         RadioButton randomMode = new RadioButton("Losowe rozmieszczenie");
@@ -125,7 +132,9 @@ public class App extends Application {
         grid.add(populationField, 1, 10);
         grid.add(seedLabel, 0, 11);
         grid.add(seedField, 1, 11);
-        grid.add(runButton, 1, 12);
+        grid.add(parentSelectionLabel, 0, 12);
+        grid.add(parentSelectionCombo, 1, 12);
+        grid.add(runButton, 1, 13);
 
         runButton.setOnAction(event -> {
             try {
@@ -136,6 +145,10 @@ public class App extends Application {
                 int generationCount = Integer.parseInt(generationField.getText());
                 int populationSize = Integer.parseInt(populationField.getText());
                 long seed = Long.parseLong(seedField.getText());
+
+                String selectedParentSelection = parentSelectionCombo.getValue();
+                ParentSelectionType parentSelectionType = ParentSelectionType.fromLabel(selectedParentSelection);
+                Population.setParentSelectionType(parentSelectionType);
 
                 int carCount;
                 List<Integer> carList = null;
@@ -191,7 +204,7 @@ public class App extends Application {
             }
         });
 
-        Scene scene = new Scene(grid, 300, 450);
+        Scene scene = new Scene(grid, 330, 490);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
