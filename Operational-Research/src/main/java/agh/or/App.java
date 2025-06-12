@@ -10,17 +10,19 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App extends Application {
 
@@ -52,6 +54,48 @@ public class App extends Application {
         Label seedLabel = new Label("Seed:");
         TextField seedField = new TextField(Long.toString(System.currentTimeMillis()));
 
+        Label configModeLabel = new Label("Tryb konfiguracji:");
+        RadioButton randomMode = new RadioButton("Losowe rozmieszczenie");
+        RadioButton fileMode = new RadioButton("Wczytaj z pliku");
+        ToggleGroup modeGroup = new ToggleGroup();
+        randomMode.setToggleGroup(modeGroup);
+        fileMode.setToggleGroup(modeGroup);
+        randomMode.setSelected(true); // Domyślnie losowe
+
+        Label filePathLabel = new Label("Plik konfiguracji:");
+        TextField filePathField = new TextField();
+        Button browseButton = new Button("Przeglądaj...");
+
+        // Listener do zmiany trybu
+        modeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            boolean isFileMode = newToggle == fileMode;
+            filePathLabel.setDisable(!isFileMode);
+            filePathField.setDisable(!isFileMode);
+            browseButton.setDisable(!isFileMode);
+            carCountLabel.setDisable(isFileMode);
+            carCountField.setDisable(isFileMode);
+        });
+
+        // Ustawienie przy inicjalizacji - plik wyłączony
+        filePathLabel.setDisable(true);
+        filePathField.setDisable(true);
+        browseButton.setDisable(true);
+
+        // Obsługa przycisku przeglądania
+        browseButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Wybierz plik konfiguracji");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Pliki tekstowe", "*.txt"),
+                    new FileChooser.ExtensionFilter("Wszystkie pliki", "*.*")
+            );
+
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            if (selectedFile != null) {
+                filePathField.setText(selectedFile.getAbsolutePath());
+            }
+        });
+
         Button runButton = new Button("Oblicz");
 
         GridPane grid = new GridPane();
@@ -59,27 +103,32 @@ public class App extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        grid.add(carCountLabel, 0, 0);
-        grid.add(carCountField, 1, 0);
-        grid.add(drivingTimeLabel, 0, 1);
-        grid.add(drivingTimeField, 1, 1);
-        grid.add(changeTimeLabel, 0, 2);
-        grid.add(changeTimeField, 1, 2);
-        grid.add(minLightsLabel, 0, 3);
-        grid.add(minLightsField, 1, 3);
-        grid.add(maxLightsLabel, 0, 4);
-        grid.add(maxLightsField, 1, 4);
-        grid.add(generationLabel, 0, 5);
-        grid.add(generationField, 1, 5);
-        grid.add(populationLabel, 0, 6);
-        grid.add(populationField, 1, 6);
-        grid.add(seedLabel, 0, 7);
-        grid.add(seedField, 1, 7);
-        grid.add(runButton, 1, 8);
+        grid.add(configModeLabel, 0, 0);
+        grid.add(randomMode, 1, 0);
+        grid.add(fileMode, 1, 1);
+        grid.add(carCountLabel, 0, 2);
+        grid.add(carCountField, 1, 2);
+        grid.add(filePathLabel, 0, 3);
+        grid.add(filePathField, 1, 3);
+        grid.add(browseButton, 1, 4);
+        grid.add(drivingTimeLabel, 0, 5);
+        grid.add(drivingTimeField, 1, 5);
+        grid.add(changeTimeLabel, 0, 6);
+        grid.add(changeTimeField, 1, 6);
+        grid.add(minLightsLabel, 0, 7);
+        grid.add(minLightsField, 1, 7);
+        grid.add(maxLightsLabel, 0, 8);
+        grid.add(maxLightsField, 1, 8);
+        grid.add(generationLabel, 0, 9);
+        grid.add(generationField, 1, 9);
+        grid.add(populationLabel, 0, 10);
+        grid.add(populationField, 1, 10);
+        grid.add(seedLabel, 0, 11);
+        grid.add(seedField, 1, 11);
+        grid.add(runButton, 1, 12);
 
         runButton.setOnAction(event -> {
             try {
-                int carCount = Integer.parseInt(carCountField.getText());
                 int drivingTime = Integer.parseInt(drivingTimeField.getText());
                 int changeTime = Integer.parseInt(changeTimeField.getText());
                 int minLights = Integer.parseInt(minLightsField.getText());
@@ -87,6 +136,27 @@ public class App extends Application {
                 int generationCount = Integer.parseInt(generationField.getText());
                 int populationSize = Integer.parseInt(populationField.getText());
                 long seed = Long.parseLong(seedField.getText());
+
+                int carCount;
+                List<Integer> carList = null;
+
+                if (randomMode.isSelected()) {
+                    carCount = Integer.parseInt(carCountField.getText());
+                } else {
+                    String filePath = filePathField.getText().trim();
+                    if (filePath.isEmpty()) {
+                        showAlert("Błąd", "Zły plik konfiguracji!");
+                        return;
+                    }
+
+                    try {
+                        carList = CarListGenerator.loadFromFile(filePath);
+                        carCount = carList.stream().mapToInt(Integer::intValue).sum();
+                    } catch (Exception e) {
+                        showAlert("Błąd", "Nie można wczytać pliku: " + e.getMessage());
+                        return;
+                    }
+                }
 
                 Configuration configuration = new Configuration(
                         carCount,
@@ -101,6 +171,10 @@ public class App extends Application {
 
                 ConfigurationGlobal.setInstance(configuration);
 
+                if (carList != null) {
+                    ConfigurationGlobal.setCarList(carList);
+                }
+
                 Solution solution = Solution.genetic();
                 if (solution.willEnd()) {
                     Simulation simulation = new Simulation(solution);
@@ -109,14 +183,25 @@ public class App extends Application {
 
                 openChartsWindow();
 
+            } catch (NumberFormatException e) {
+                showAlert("Błąd", "Nieprawidłowe wartości liczbowe!");
             } catch (Exception e) {
                 e.printStackTrace();
+                showAlert("Błąd", "Wystąpił błąd: " + e.getMessage());
             }
         });
 
-        Scene scene = new Scene(grid, 300, 350);
+        Scene scene = new Scene(grid, 300, 450);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private static class DataBounds {
