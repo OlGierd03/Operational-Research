@@ -28,21 +28,32 @@ public class Population {
 
     public void nextGeneration() {
         List<List<O>> parents = selectParents();
-        List<List<O>> offspring = crossoverInGeneration(parents);
+        List<List<O>> offspring = crossoverInGeneration(parents, 0);
         for (List<O> child : offspring) {
-            mutateIndividual(child, 0.01);
+            mutateIndividualDel(child, 0.1);
             Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
     }
 
-    private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
+    private List<List<O>> crossoverInGeneration(List<List<O>> parents, int type) {
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
             Collections.shuffle(copy, new Random(configuration.seed()));
-            List<O> child = crossoverParents(copy.getFirst(), copy.getLast());
-            List<O> child2 = crossoverParents(copy.getFirst(), copy.getLast());
+            List<O> child;
+            List<O> child2;
+            if (type == 0) {
+                child = crossoverParentsBottom(copy.getFirst(), copy.getLast());
+                child2 = crossoverParentsBottom(copy.getFirst(), copy.getLast());
+            } else if (type == 1) {
+                child = crossoverParentsBottom(copy.getFirst(), copy.getLast());
+                child2 = crossoverParentsTop(copy.getFirst(), copy.getLast());
+            } else {
+                child = crossoverParentsTop(copy.getFirst(), copy.getLast());
+                child2 = crossoverParentsTop(copy.getFirst(), copy.getLast());
+            }
+
             copy.removeFirst();
             if(copy.isEmpty()) break;
             copy.removeLast();
@@ -52,10 +63,20 @@ public class Population {
         return offspring;
     }
 
-    private List<O> crossoverParents(List<O> parent1, List<O> parent2) {
+    private List<O> crossoverParentsBottom(List<O> parent1, List<O> parent2) {
         List<O> offspring = new ArrayList<>();
-        int genomeLength = random.nextInt(Math.min(parent1.size(), parent2.size()), Math.max(parent1.size(), parent2.size()) + 1);
+        int genomeLength = random.nextInt(Math.min(parent1.size(), parent2.size())-1, Math.max(parent1.size(), parent2.size()) + 1);
         for (int i = 0; i < genomeLength; i++) {
+            offspring.add(crossoverGens(parent1, parent2, i));
+        }
+
+        return offspring;//Solution.fixList(offspring, configuration);
+    }
+
+    private List<O> crossoverParentsTop(List<O> parent1, List<O> parent2) {
+        List<O> offspring = new ArrayList<>();
+        int genomeLength = random.nextInt(Math.min(parent1.size(), parent2.size())-1, Math.max(parent1.size(), parent2.size()) + 1);
+        for (int i = genomeLength - 1; i >= 0; i--) {
             offspring.add(crossoverGens(parent1, parent2, i));
         }
 
