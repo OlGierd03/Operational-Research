@@ -1,5 +1,7 @@
 package agh.or;
 
+import agh.or.gen.ChildCreationType;
+import agh.or.gen.MutationSelectionType;
 import agh.or.gen.ParentSelectionType;
 import agh.or.gen.Population;
 import agh.or.globals.ConfigurationGlobal;
@@ -60,6 +62,20 @@ public class App extends Application {
         ComboBox<String> parentSelectionCombo = new ComboBox<>();
         parentSelectionCombo.getItems().addAll("Ruletka", "Turniej", "Ranking");
         parentSelectionCombo.setValue("Ranking");
+
+        Label mutationLabel = new Label("Rodzaj mutacji dziecka:");
+        ComboBox<String> mutationSelectionCombo = new ComboBox<>();
+        mutationSelectionCombo.getItems().addAll("Random", "Removal");
+        mutationSelectionCombo.setValue("Random");
+
+        Label chanceLabel = new Label("Szansa mutacji (%):");
+        Spinner<Integer> chanceSpinner = new Spinner<>(0, 100, 30);
+        chanceSpinner.setEditable(true);
+
+        Label childCreationLabel = new Label("Sposób tworzenia dziecka:");
+        ComboBox<String> childCreationSelectionCombo = new ComboBox<>();
+        childCreationSelectionCombo.getItems().addAll("Top", "Mix", "Bottom");
+        childCreationSelectionCombo.setValue("Bottom");
 
         Label configModeLabel = new Label("Tryb konfiguracji:");
         RadioButton randomMode = new RadioButton("Losowe rozmieszczenie");
@@ -134,7 +150,13 @@ public class App extends Application {
         grid.add(seedField, 1, 11);
         grid.add(parentSelectionLabel, 0, 12);
         grid.add(parentSelectionCombo, 1, 12);
-        grid.add(runButton, 1, 13);
+        grid.add(mutationLabel, 0, 13);
+        grid.add(mutationSelectionCombo, 1, 13);
+        grid.add(childCreationLabel, 0, 14);
+        grid.add(childCreationSelectionCombo, 1, 14);
+        grid.add(chanceLabel, 0, 15);
+        grid.add(chanceSpinner, 1, 15);
+        grid.add(runButton, 1, 16);
 
         runButton.setOnAction(event -> {
             try {
@@ -149,6 +171,16 @@ public class App extends Application {
                 String selectedParentSelection = parentSelectionCombo.getValue();
                 ParentSelectionType parentSelectionType = ParentSelectionType.fromLabel(selectedParentSelection);
                 Population.setParentSelectionType(parentSelectionType);
+                String selectedMutationSelection = mutationSelectionCombo.getValue();
+                MutationSelectionType mutationSelectionType = MutationSelectionType.fromLabel(selectedMutationSelection);
+                Population.setMutationSelectionType(mutationSelectionType);
+
+                double mutationChance = (double) chanceSpinner.getValue() /100;
+                Population.setMutationChance(mutationChance);
+
+                String childCreationSelection = childCreationSelectionCombo.getValue();
+                ChildCreationType childCreationType = ChildCreationType.fromLabel(childCreationSelection);
+                Population.setChildCreationType(childCreationType);
 
                 int carCount;
                 List<Integer> carList = null;
@@ -204,7 +236,7 @@ public class App extends Application {
             }
         });
 
-        Scene scene = new Scene(grid, 330, 490);
+        Scene scene = new Scene(grid, 380, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
