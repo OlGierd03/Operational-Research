@@ -8,11 +8,15 @@ import java.util.List;
 
 public class ConfigurationGlobal {
     private static List<Integer> carList;
-    private static Configuration configuration;
 
+    private static Configuration configuration;
     public static void setInstance(Configuration configuration) {
         ConfigurationGlobal.configuration = configuration;
         carList = CarListGenerator.createCars(configuration);
+    }
+
+    public static void setCarList(List<Integer> carList) {
+        ConfigurationGlobal.carList = carList;
     }
 
     /// Getters

@@ -13,8 +13,9 @@ public class Population {
 
     private final List<List<O>> individuals = new ArrayList<>();
     private final Configuration configuration;
-    private final List<Integer> carCount;
     private Random random;
+    private static ParentSelectionType parentSelectionType;
+    private final List<Integer> carCount;
 
     public Population() {
         this.configuration = ConfigurationGlobal.getConfiguration();
@@ -24,6 +25,10 @@ public class Population {
         for (int i = 0; i < configuration.populationSize() ; i++) {
             this.individuals.add(ORandomizer.randomize(configuration));
         }
+    }
+
+    public static void setParentSelectionType(ParentSelectionType parentSelectionType) {
+        Population.parentSelectionType = parentSelectionType;
     }
 
     public void nextGeneration() {
@@ -40,6 +45,7 @@ public class Population {
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
+
             Collections.shuffle(copy, new Random(configuration.seed()));
             List<O> child;
             List<O> child2;
@@ -128,10 +134,76 @@ public class Population {
     }
 
     private List<List<O>> selectParents() {
+        return switch (Population.parentSelectionType) {
+            case ROULETTE -> selectParentsRoulette();
+            case TOURNAMENT -> selectParentsTournament();
+            case RANKING -> selectParentsTopHalf();
+        };
+    }
+
+    private List<List<O>> selectParentsTopHalf() {
         return individuals.stream()
                 .sorted((o1, o2) -> Integer.compare(getScore(o1), getScore(o2))) // sort ascending
                 .limit(individuals.size() / 2)
                 .toList();
+    }
+
+    private List<List<O>> selectParentsTournament() {
+        List<List<O>> parents = new ArrayList<>();
+        int parentsCount = individuals.size() / 2;
+        int tournamentSize = Math.max(2, individuals.size() / 10);
+
+        for (int i = 0; i < parentsCount; i++) {
+            // losowe osobniki biorą udział w turnieju
+            List<List<O>> tournament = new ArrayList<>();
+            for (int j = 0; j < tournamentSize; j++) {
+                int randomIndex = random.nextInt(individuals.size());
+                tournament.add(individuals.get(randomIndex));
+            }
+
+            // zwycięza turnieju
+            List<O> winner = tournament.stream()
+                    .min(Comparator.comparingInt(this::getScore))
+                    .orElseThrow(() -> new RuntimeException("Tournament selection failed"));
+
+            parents.add(winner);
+        }
+
+        return parents;
+    }
+
+    private List<List<O>> selectParentsRoulette() {
+        List<List<O>> parents = new ArrayList<>();
+        int parentsCount = individuals.size() / 2;
+
+        List<Double> fitnessValues = new ArrayList<>();
+        double maxScore = individuals.stream()
+                .mapToInt(this::getScore)
+                .max()
+                .orElse(1);
+
+        double totalFitness = 0.0;
+        for (List<O> individual : individuals) {
+            double fitness = maxScore - getScore(individual) + 1.0; // stała, żeby zawsze dodatnie
+            fitnessValues.add(fitness);
+            totalFitness += fitness;
+        }
+
+        // pętla ruletki
+        for (int i = 0; i < parentsCount; i++) {
+            double randomValue = random.nextDouble() * totalFitness;
+            double cumulativeFitness = 0.0;
+
+            for (int j = 0; j < individuals.size(); j++) {
+                cumulativeFitness += fitnessValues.get(j);
+                if (cumulativeFitness >= randomValue) {
+                    parents.add(individuals.get(j));
+                    break;
+                }
+            }
+        }
+
+        return parents;
     }
 
     private void mutateIndividual(List<O> individual, double mutationChance) {
