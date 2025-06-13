@@ -256,13 +256,17 @@ public class App extends Application {
 
         XYChart.Series<Number, Number> bestSeries = new XYChart.Series<>();
         bestSeries.setName("Najlepszy");
+        XYChart.Series<Number, Number> bestOverallSeries = new XYChart.Series<>();
+        bestOverallSeries.setName("Najlepszy ogólnie");
         XYChart.Series<Number, Number> avgSeries = new XYChart.Series<>();
         avgSeries.setName("Średnia");
 
         DataBounds bestBounds = readDataIntoSeries("bestPops.txt", bestSeries);
         DataBounds avgBounds = readDataIntoSeries("avgPop.txt", avgSeries);
+        createBestOverallSeries("bestPops.txt", bestOverallSeries);
 
         bestChart.getData().add(bestSeries);
+        bestChart.getData().add(bestOverallSeries);
         avgChart.getData().add(avgSeries);
 
         if (bestBounds != null && avgBounds != null) {
@@ -294,6 +298,41 @@ public class App extends Application {
         Scene scene = new Scene(chartsBox, 1230, 600);
         chartStage.setScene(scene);
         chartStage.show();
+        System.out.println();
+    }
+
+    private void createBestOverallSeries(String filename, XYChart.Series<Number, Number> series) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            int bestOverall = Integer.MAX_VALUE;
+            int bestGeneration = 0;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.trim().split("\\s+");
+                if (parts.length >= 2) {
+                    try {
+                        int generation = Integer.parseInt(parts[0]);
+                        int value = Integer.parseInt(parts[1]);
+
+                        if (value < bestOverall) {
+                            bestGeneration = generation;
+                            bestOverall = value;
+                        }
+
+                        series.getData().add(new XYChart.Data<>(generation, bestOverall));
+
+                    } catch (NumberFormatException e) {
+                        System.err.println("Błąd parsowania linii: " + line);
+                    }
+                }
+            }
+
+            System.out.printf("Best found in generation: %d%n", bestGeneration);
+            System.out.printf("Best found value: %d%n", bestOverall);
+
+        } catch (IOException e) {
+            System.err.println("Błąd odczytu pliku " + filename + ": " + e.getMessage());
+        }
     }
 
     private DataBounds readDataIntoSeries(String fileName, XYChart.Series<Number, Number> series) {
