@@ -265,26 +265,27 @@ public class App extends Application {
         bestChart.getData().add(bestSeries);
         avgChart.getData().add(avgSeries);
 
-        if (bestBounds != null) {
+        if (bestBounds != null && avgBounds != null) {
+            double minY = Math.min(bestBounds.minY, avgBounds.minY);
+            minY = Math.floor(minY / 10.0) * 10.0;
+            double maxY = Math.max(bestBounds.maxY, avgBounds.maxY);
+            maxY = Math.ceil(maxY / 10.0) * 10.0;
+
             xAxis1.setLowerBound(0);
             xAxis1.setUpperBound(ConfigurationGlobal.getGenerationCount());
-            yAxis1.setLowerBound(bestBounds.minY);
-            yAxis1.setUpperBound(bestBounds.maxY);
-
-            xAxis1.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
-            yAxis1.setTickUnit((bestBounds.maxY - bestBounds.minY) / 10.0);
-            System.out.println(yAxis1.getTickUnit());
-        }
-
-        if (avgBounds != null) {
             xAxis2.setLowerBound(0);
             xAxis2.setUpperBound(ConfigurationGlobal.getGenerationCount());
-            yAxis2.setLowerBound(avgBounds.minY);
-            yAxis2.setUpperBound(avgBounds.maxY);
 
+            yAxis1.setLowerBound(minY);
+            yAxis1.setUpperBound(maxY);
+            yAxis2.setLowerBound(minY);
+            yAxis2.setUpperBound(maxY);
+
+            xAxis1.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
+            yAxis1.setTickUnit((maxY - minY) / 10.0);
             xAxis2.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
-            yAxis2.setTickUnit((avgBounds.maxY - avgBounds.minY) / 10.0);
-            System.out.println(yAxis2.getTickUnit());
+            yAxis2.setTickUnit((maxY - minY) / 10.0);
+            System.out.println(yAxis1.getTickUnit());
         }
 
         HBox chartsBox = new HBox(10, bestChart, avgChart);
