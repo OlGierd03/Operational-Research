@@ -25,7 +25,7 @@ public class GeneticAlgorithmTest {
         Solution solution1 = Solution.genetic();
         Solution solution2 = Solution.genetic();
 
-        assert solution1.getValues().equals(solution2.getValues()) : "Solutions should be equal with the same seed";
+        Assertions.assertEquals(solution1.getValues(), solution2.getValues(), "Solutions should be equal with the same seed");
 
     }
 }
