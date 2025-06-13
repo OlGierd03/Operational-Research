@@ -15,6 +15,9 @@ public class Population {
     private final Configuration configuration;
     private Random random;
     private static ParentSelectionType parentSelectionType;
+    private static MutationSelectionType mutationSelectionType;
+    private static ChildCreationType childCreationType;
+    private static double mutationChance;
     private final List<Integer> carCount;
 
     public Population() {
@@ -31,17 +34,28 @@ public class Population {
         Population.parentSelectionType = parentSelectionType;
     }
 
+    public static void setMutationSelectionType(MutationSelectionType mutationSelectionType) {
+        Population.mutationSelectionType = mutationSelectionType;
+    }
+    public static void setMutationChance(double chance) {
+        Population.mutationChance = chance;
+    }
+    public static void setChildCreationType(ChildCreationType childCreationType) {
+        Population.childCreationType = childCreationType;
+    }
+
+
     public void nextGeneration() {
         List<List<O>> parents = selectParents();
-        List<List<O>> offspring = crossoverInGeneration(parents, 0);
+        List<List<O>> offspring = crossoverInGeneration(parents);
         for (List<O> child : offspring) {
-            mutateIndividualDel(child, 0.1);
+            mutate(child);
             Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
     }
 
-    private List<List<O>> crossoverInGeneration(List<List<O>> parents, int type) {
+    private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
         List<List<O>> copy = new ArrayList<>(parents);
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
@@ -49,10 +63,10 @@ public class Population {
             Collections.shuffle(copy, new Random(configuration.seed()));
             List<O> child;
             List<O> child2;
-            if (type == 0) {
+            if (Population.childCreationType == ChildCreationType.BOTTOM) {
                 child = crossoverParentsBottom(copy.getFirst(), copy.getLast());
                 child2 = crossoverParentsBottom(copy.getFirst(), copy.getLast());
-            } else if (type == 1) {
+            } else if (Population.childCreationType == ChildCreationType.MIX) {
                 child = crossoverParentsBottom(copy.getFirst(), copy.getLast());
                 child2 = crossoverParentsTop(copy.getFirst(), copy.getLast());
             } else {
@@ -204,6 +218,13 @@ public class Population {
         }
 
         return parents;
+    }
+
+    private void mutate(List<O> individual) {
+       switch (Population.mutationSelectionType) {
+           case DELETE -> mutateIndividualDel(individual, Population.mutationChance);
+           case RANDOM -> mutateIndividual(individual, Population.mutationChance);
+        };
     }
 
     private void mutateIndividual(List<O> individual, double mutationChance) {
