@@ -9,7 +9,6 @@ import java.util.*;
 
 public class Solution {
     private List<O> values;
-    private static Random rng;
 
     public static Solution random(Configuration configuration) {
         return new Solution(ORandomizer.randomize(configuration));
@@ -93,9 +92,7 @@ public class Solution {
     public static List<O> fixList(List<O> values, Configuration configuration) {
         var missing = getMissingList(values);
         var valids = LightsSets.getValids();
-        if(rng == null){
-            rng = new Random(configuration.seed());
-        }
+        Random random = new Random(configuration.seed());
 
         while (!missing.isEmpty()) {
             Lights bestSeq = null;
@@ -111,7 +108,7 @@ public class Solution {
                     bestSeq = seq;
                 }
             }
-            values.add(new O(bestSeq, rng.nextInt(
+            values.add(new O(bestSeq, random.nextInt(
                     configuration.minLightsTime(),
                     configuration.maxLightsTime() + 1
             )));

@@ -46,7 +46,7 @@ public class Population {
         List<List<O>> offspring = new ArrayList<>();
         while (!copy.isEmpty()) {
 
-            Collections.shuffle(copy, new Random(configuration.seed()));
+            Collections.shuffle(copy, random);
             List<O> child;
             List<O> child2;
             if (type == 0) {
