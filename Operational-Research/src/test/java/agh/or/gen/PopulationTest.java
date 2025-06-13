@@ -65,7 +65,7 @@ public class PopulationTest {
                 List<O> individual2 = individuals2.get(j);
                 assertEquals(individual1.size(), individual2.size(), "Rozmiary indywidualnych nie są takie same");
                 for (int k = 0; k < individual1.size(); k++) {
-                    assertEquals(individual1.get(k), individual2.get(k), "Indywidualy różnią się na pozycji " + k);
+                    assertEquals(individual1.get(k), individual2.get(k), "Indywidualy różnią się na pozycji " + k + "; generacja: " + i);
                 }
             }
         }
