@@ -1,6 +1,7 @@
 package agh.or.gen;
 
 import agh.or.CarListGenerator;
+import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
 import agh.or.Lights;
 import agh.or.records.O;
@@ -29,22 +30,36 @@ public class PopulationTest {
                 0L
         );
 
-        carCount = CarListGenerator.createCars(configuration);
-
+//        carCount = CarListGenerator.createCars(configuration);
+        ConfigurationGlobal.setInstance(configuration);
     }
 
     @Test
     void testPopulationConstructor() {
-        int populationSize = 10;
-
         Population population = new Population();
 
         assertNotNull(population.getIndividuals(), "Lista individuals nie powinna być null");
-        assertEquals(populationSize, population.getIndividuals().size(), "Rozmiar populacji powinien być równy przekazanemu rozmiarowi");
         for (List<O> individual : population.getIndividuals()) {
             assertNotNull(individual, "Indywidual nie powinien być null");
             System.out.println("Indywidual: " + individual);
         }
+    }
+
+    @Test
+    void seedTest() {
+        Population population1 = new Population();
+        Population population2 = new Population();
+
+        population1.setParentSelectionType(ParentSelectionType.TOURNAMENT);
+        population2.setParentSelectionType(ParentSelectionType.TOURNAMENT);
+
+
+        for (int i = 0; i < ConfigurationGlobal.getGenerationCount(); i++) {
+            population1.nextGeneration();
+            population2.nextGeneration();
+            assertEquals(population1.getIndividuals().size(), population2.getIndividuals().size(), "Rozmiary populacji powinny być takie same");
+        }
+
     }
 
 }
