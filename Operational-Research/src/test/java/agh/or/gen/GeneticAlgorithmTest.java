@@ -3,6 +3,7 @@ package agh.or.gen;
 import agh.or.Solution;
 import agh.or.globals.ConfigurationGlobal;
 import agh.or.records.Configuration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class GeneticAlgorithmTest {

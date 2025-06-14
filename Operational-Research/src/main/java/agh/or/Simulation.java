@@ -81,11 +81,4 @@ public class Simulation {
         return time;
     }
 
-//    public Simulation copy() {
-//        Simulation newSimulation = new Simulation(this.configuration, false);
-//        for(int i = 0; i != 12; ++i){
-//            newSimulation.carCount.set(i, carCount.get(i).intValue());
-//        }
-//        return newSimulation;
-//    }
 }

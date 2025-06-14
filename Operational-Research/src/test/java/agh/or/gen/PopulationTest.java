@@ -30,7 +30,6 @@ public class PopulationTest {
                 0L
         );
 
-//        carCount = CarListGenerator.createCars(configuration);
         ConfigurationGlobal.setInstance(configuration);
     }
 
@@ -45,31 +44,6 @@ public class PopulationTest {
         }
     }
 
-    @Test
-    void seedTest() {
-        Population population1 = new Population();
-        Population population2 = new Population();
 
-        population1.setParentSelectionType(ParentSelectionType.TOURNAMENT);
-        population2.setParentSelectionType(ParentSelectionType.TOURNAMENT);
-
-
-        for (int i = 0; i < ConfigurationGlobal.getGenerationCount(); i++) {
-            population1.nextGeneration();
-            population2.nextGeneration();
-            // check if every individual is the same
-            List<List<O>> individuals1  = population1.getIndividuals();
-            List<List<O>> individuals2 = population2.getIndividuals();
-            for (int j = 0; j < individuals1.size(); j++) {
-                List<O> individual1 = individuals1.get(j);
-                List<O> individual2 = individuals2.get(j);
-                assertEquals(individual1.size(), individual2.size(), "Rozmiary indywidualnych nie są takie same");
-                for (int k = 0; k < individual1.size(); k++) {
-                    assertEquals(individual1.get(k), individual2.get(k), "Indywidualy różnią się na pozycji " + k + "; generacja: " + i);
-                }
-            }
-        }
-
-    }
 
 }

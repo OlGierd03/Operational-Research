@@ -19,6 +19,8 @@ public class Population {
     private static ChildCreationType childCreationType;
     private static double mutationChance;
     private final List<Integer> carCount;
+    public List<O> bestInAllPopulations = null;
+    private int idx = 0;
 
     public Population() {
         this.configuration = ConfigurationGlobal.getConfiguration();
@@ -27,6 +29,9 @@ public class Population {
 
         for (int i = 0; i < configuration.populationSize() ; i++) {
             this.individuals.add(ORandomizer.randomize(configuration));
+        }
+        if (bestInAllPopulations == null || getScore(bestInAllPopulations) > getBestScore()) {
+            bestInAllPopulations = getBest();
         }
     }
 
@@ -53,6 +58,7 @@ public class Population {
             Solution.fixList(child, configuration);
         }
         replacePopulation(offspring, parents);
+        idx++;
     }
 
     private List<List<O>> crossoverInGeneration(List<List<O>> parents) {
@@ -90,7 +96,7 @@ public class Population {
             offspring.add(crossoverGens(parent1, parent2, i));
         }
 
-        return offspring;//Solution.fixList(offspring, configuration);
+        return offspring;
     }
 
     private List<O> crossoverParentsTop(List<O> parent1, List<O> parent2) {
@@ -100,7 +106,7 @@ public class Population {
             offspring.add(crossoverGens(parent1, parent2, i));
         }
 
-        return offspring;//Solution.fixList(offspring, configuration);
+        return offspring;
     }
 
     private O crossoverGens(List<O> parent1, List<O> parent2, int i) {
@@ -142,7 +148,6 @@ public class Population {
         assert solution.willEnd();
         score = new Simulation(solution).run(false);
 
-//        System.out.println("%d\t%d".formatted(individual.size(), solution.size()));
 
         return doubleFlag ? score * 2 : score;
     }

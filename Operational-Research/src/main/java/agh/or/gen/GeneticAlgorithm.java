@@ -27,8 +27,19 @@ public class GeneticAlgorithm {
             }
             catch (Exception ignored) {}
         } catch (Exception ignored) {}
-        System.out.println("Best after:");
-        System.out.println(population.getBest());
+
+        List<Integer> carList = ConfigurationGlobal.getCarList();
+
+        for (int i = 0; i < carList.size(); i++) {
+            System.out.println("Lane " + i + ": " +carList.get(i) + " cars");
+        }
+
+        System.out.println("Best found:");
+        System.out.println("[");
+        for (Object individual : population.getBest()) {
+            System.out.println(" " + individual + ",");
+        }
+        System.out.println("]");
         return population.getBest();
     }
 }

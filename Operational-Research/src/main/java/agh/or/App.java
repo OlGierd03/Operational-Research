@@ -291,7 +291,7 @@ public class App extends Application {
         XYChart.Series<Number, Number> bestOverallSeries = new XYChart.Series<>();
         bestOverallSeries.setName("Najlepszy ogólnie");
         XYChart.Series<Number, Number> avgSeries = new XYChart.Series<>();
-        avgSeries.setName("Średnia");
+        avgSeries.setName("Średni wynik w populacji");
 
         DataBounds bestBounds = readDataIntoSeries("bestPops.txt", bestSeries);
         DataBounds avgBounds = readDataIntoSeries("avgPop.txt", avgSeries);
@@ -321,7 +321,6 @@ public class App extends Application {
             yAxis1.setTickUnit((maxY - minY) / 10.0);
             xAxis2.setTickUnit(ConfigurationGlobal.getGenerationCount() / 10.0);
             yAxis2.setTickUnit((maxY - minY) / 10.0);
-            System.out.println(yAxis1.getTickUnit());
         }
 
         HBox chartsBox = new HBox(10, bestChart, avgChart);
